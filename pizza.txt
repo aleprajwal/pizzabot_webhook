@@ -1,3 +1,4 @@
-Pizza:cheesemedium
+Pizza:cheesesmall
 Drink:coca cola
+Breadsticks:Pillsbury
 Dessert:Turkish Delight Sundae

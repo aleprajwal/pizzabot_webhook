@@ -3,13 +3,14 @@ import json
 import os
 import logging
 import random
-from response import (WELCOME, ORDER_PIZZA, UPSELL_DRINK, 
-    UPSELL_BREADSTICK, UPSELL_DESSERT, ORDER_DELIVERY, COMPELETE_ORDER_FALLBACK)
-
+from response import (WELCOME, ORDER_PIZZA, UPSELL_DRINK,
+                      UPSELL_BREADSTICK, UPSELL_DESSERT, ORDER_DELIVERY, COMPELETE_ORDER_FALLBACK)
 
 # initilize flask app
 app = Flask(__name__)
 filename = "pizza.txt"
+image = {'pizza': 'pizza.jpg', 'drink': 'drink.jpg', 'breadstick': 'breadstick.jpg', 'dessert': 'dessert.jpg'}
+
 
 # default route
 @app.route('/', methods=['POST', 'GET'])
@@ -21,10 +22,9 @@ def webhook():
     except AttributeError:
         return 'JSON error'
 
-
     if action == 'input.welcome':
         response = {
-        "fulfillmentText": welcome(),
+            "fulfillmentText": welcome(),
         }
 
     elif action == 'order.pizza':
@@ -50,6 +50,22 @@ def webhook():
     elif action == 'complete.order.fallback':
         response = {"fulfillmentText": complete_order_fallback()}
 
+    # elif action == 'order.pizza.menu':
+    #     response = {"fulfillmentMessage": {
+    #         "image": {
+    #             "imageUri": menu(image['pizza'])
+    #         },
+    #         "platform": "TELEGRAM"}}
+    #
+    # elif action == 'upsell.drink.menu':
+    #     menu(image['drink'])
+    #
+    # elif action == 'upsell.breadstick.menu':
+    #     menu(image['breadstick'])
+    #
+    # elif action == 'upsell.dessert.menu':
+    #     menu(image['dessert'])
+
     else:
         logging.error("Action ERROR", exc_info=True)
 
@@ -58,10 +74,40 @@ def webhook():
     return r
 
 
-@app.route('/get_image', methods=['GET', 'POST'])
-def get_image():
+@app.route('/pizza_menu', methods=['GET', 'POST'])
+def pizza_menu():
     try:
-        image = 'menu.jpg'
+        image = os.path.join('image', 'pizza.jpg')
+        return send_file(image, mimetype='image/gif')
+
+    except Exception as e:
+        logging.error("500 Error pizza_menu", exc_info=True)
+
+
+@app.route('/drink_menu', methods=['GET', 'POST'])
+def drink_menu():
+    try:
+        image = os.path.join('image', 'drink.jpg')
+        return send_file(image, mimetype='image/gif')
+
+    except Exception as e:
+        logging.error("get_image()", exc_info=True)
+
+
+@app.route('/breadstick_menu', methods=['GET', 'POST'])
+def breadstick_menu():
+    try:
+        image = os.path.join('image', 'breadstick.jpg')
+        return send_file(image, mimetype='image/gif')
+
+    except Exception as e:
+        logging.error("get_image()", exc_info=True)
+
+
+@app.route('/dessert_menu', methods=['GET', 'POST'])
+def dessert_menu():
+    try:
+        image = os.path.join('image', 'dessert.jpg')
         return send_file(image, mimetype='image/gif')
 
     except Exception as e:
@@ -70,7 +116,7 @@ def get_image():
 
 def welcome():
     return random.choice(WELCOME)
-        
+
 
 def order_pizza(req):
     params = req.get('queryResult').get('parameters')
@@ -84,9 +130,9 @@ def order_pizza(req):
         logging.error("500 error --> order_pizza(req)", exc_info=True)
     output_string = random.choice(ORDER_PIZZA)
     return output_string.format(
-        number=int(params['number']), 
-        size=params['size'], 
-        pizza_topping=', '.join(str(top) for top in params['pizza_topping']))   # list to string
+        number=int(params['number']),
+        size=params['size'],
+        pizza_topping=', '.join(str(top) for top in params['pizza_topping']))  # list to string
 
 
 def upsell_drink(req):
