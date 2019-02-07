@@ -10,12 +10,11 @@ WELCOME = [
 ORDER_PIZZA = [
 "{number} {size} sized {pizza_topping} pizza, sure!! Would you like to have a drink?"]
 
-
 UPSELL_DRINK = [
-"{drink}, Would you love to have some breadsticks?"]
+"{drink}, We have desserts too. Would you like to order it?"]
 
 UPSELL_BREADSTICK = [
-"{breadstick}, Breadsticks. Would you like to have a dessert too?"]
+"{breadstick}, Breadsticks. Would you like to have drinks too?"]
 
 UPSELL_DESSERT = [
 "{dessert} sweet!! \n\nYOUR ORDER DETAILS\n{items}\nDoes this complete your order?"]
