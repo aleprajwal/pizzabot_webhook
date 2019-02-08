@@ -50,6 +50,7 @@ def webhook():
     elif action == 'complete.order.fallback':
         response = {"fulfillmentText": complete_order_fallback()}
 
+
     # elif action == 'order.pizza.menu':
     #     response = {"fulfillmentMessage": {
     #         "image": {
@@ -123,8 +124,8 @@ def order_pizza(req):
     try:
         file = open(filename, "w")
         file.write("Pizza:")
+        file.write("{} ".format(params['size']))
         file.write(', '.join(str(top) for top in params['pizza_topping']))
-        file.write(params['size'])
         file.close()
     except Exception as e:
         logging.error("500 error --> order_pizza(req)", exc_info=True)

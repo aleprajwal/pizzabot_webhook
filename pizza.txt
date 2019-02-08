@@ -1,4 +1,2 @@
-Pizza:cheesesmall
-Drink:coca cola
-Breadsticks:Pillsbury
-Dessert:Turkish Delight Sundae
+Pizza:large pepperoni
+Drink:coffee
