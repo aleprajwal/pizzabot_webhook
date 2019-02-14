@@ -1,4 +1,5 @@
-from flask import Flask, make_response, request, send_file
+from flask import Flask, make_response, request, send_file, Response
+from functools import wraps
 import json
 import os
 import logging
@@ -8,12 +9,37 @@ from response import (WELCOME, ORDER_PIZZA, UPSELL_DRINK,
 
 # initilize flask app
 app = Flask(__name__)
+
+def require_auth(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        auth = request.authorization
+        if not auth or not check_auth(auth.username, auth.password):
+            return authenticate()
+        return f(*args, **kwargs)
+    return decorated
+
+
+def check_auth(username, password):
+    uname='myuser'
+    pwd='mypassword'
+    return username==uname and password==pwd
+
+
+def authenticate():
+    return Response(
+        'Invalid login.\n'
+        'Invalid login.', 401,
+        {'www-Authenticate':'Basic realm="Login Required"'})
+
+
 filename = "pizza.txt"
 image = {'pizza': 'pizza.jpg', 'drink': 'drink.jpg', 'breadstick': 'breadstick.jpg', 'dessert': 'dessert.jpg'}
 
 
 # default route
 @app.route('/', methods=['POST', 'GET'])
+@require_auth
 def webhook():
     req = request.get_json(silent=True, force=True)
 
