@@ -1,2 +1,1 @@
-Pizza:large pepperoni
-Drink:coffee
+Pizza:large cheese
