@@ -1,7 +1,13 @@
+import os
+import sys
+
+# sys.path.insert(1, os.path.join(os.path.abspath('.'), 'lib')) # app engine does not include flask
+# so we need to insert path to flask
+# or create appengine_config.py file that specify where App Engine should look for third-party library
+
 from flask import Flask, make_response, request, send_file, Response
 from functools import wraps
 import json
-import os
 import logging
 import random
 from response import (WELCOME, ORDER_PIZZA, UPSELL_DRINK,
